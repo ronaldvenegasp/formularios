@@ -1,1 +1,71 @@
-<p>data works!</p>
+<h4>Formularios <small>data</small></h4>
+<hr>
+<form [formGroup]="formulario" (ngSubmit)="guardarCambios()" autocomplete="off" novalidate>
+    <div formGroupName="nombreCompleto">
+        <div class="form-group row" [ngClass]="{'has-danger': !formulario.controls.nombreCompleto.controls.nombre.valid && formulario.controls.nombreCompleto.controls.nombre.touched}">
+            <label class="col-2 col-form-label">Nombre</label>
+            <div class="col-8">
+                <input class="form-control" type="text" placeholder="Nombre" formControlName="nombre">
+                <div class="form-control-feedback" *ngIf="formulario.controls.nombreCompleto.controls.nombre.errors?.required">
+                    Este campo es requerido
+                </div>
+                <div class="form-control-feedback" *ngIf="formulario.controls.nombreCompleto.controls.nombre.errors?.minlength">
+                    Este campo requiere al menos {{formulario.controls.nombreCompleto.controls.nombre.errors.minlength.requiredLength}} caracteres
+                </div>
+            </div>
+        </div>
+        <div class="form-group row" [ngClass]="{'has-danger': !formulario.controls.nombreCompleto.controls.apellido.valid && formulario.controls.nombreCompleto.controls.apellido.touched}">
+            <label class="col-2 col-form-label">Apellido</label>
+            <div class="col-8">
+                <input class="form-control" type="text" placeholder="Apellido" formControlName="apellido">
+                <div class="form-control-feedback" *ngIf="formulario.controls.nombreCompleto.controls.apellido.errors?.required">
+                    Este campo es requerido
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row" [ngClass]="{'has-danger': !formulario.controls.correo.valid && formulario.controls.correo.touched}">
+        <label class="col-2 col-form-label">Correo</label>
+        <div class="col-md-8">
+            <input class="form-control" type="email" placeholder="Correo electrónico" formControlName="correo">
+            <div class="form-control-feedback" *ngIf="formulario.controls.correo.errors?.required">
+                Este campo es requerido
+            </div>
+            <div class="form-control-feedback" *ngIf="formulario.controls.correo.errors?.pattern">
+                El campo no tiene formato de correo
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-2 col-form-label">Password</label>
+        <div class="col-md-8">
+            <input type="password" class="form-control" placeholder="Password" formControlName="password1">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-2 col-form-label">Repetir</label>
+        <div class="col-md-8">
+            <input type="password" class="form-control" placeholder="Repetir password" formControlName="password2">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-2 col-form-label">Pasatiempos</label>
+        <div class="col-md-8" formArrayName="pasatiempos">
+            <input *ngFor="let pasatiempo of formulario.controls.pasatiempos.controls; let i = index" type="text" class="form-control" value="" [formControlName]="i">
+        </div>
+        <button type="button" class="btn btn-outline-primary" (click)="agregarPasatiempo()">Nuevo</button>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-2 col-form-label">&nbsp;</label>
+        <div class="input-group col-md-8">
+            <button type="submit" class="btn btn-outline-primary" [disabled]="!formulario.valid">Guardar</button>
+        </div>
+    </div>
+
+    {{formulario.valid}}
+
+</form>
