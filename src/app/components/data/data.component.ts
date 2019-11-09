@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -36,7 +37,8 @@ export class DataComponent {
       pasatiempos: new FormArray([
         new FormControl('', Validators.required)
       ]),
-      password1: new FormControl('', [Validators.required]),
+      username: new FormControl('', Validators.required, this.existeUsuario),
+      password1: new FormControl('', Validators.required),
       password2: new FormControl(),
     });
 
@@ -46,6 +48,18 @@ export class DataComponent {
       Validators.required,
       this.noIgual.bind(this.formulario)
     ]);
+
+    // this.formulario.valueChanges.subscribe(data => {
+    //   console.log(data);
+    // });
+
+    this.formulario.controls.username.valueChanges.subscribe(data => {
+      console.log(data);
+    });
+
+    this.formulario.controls.username.statusChanges.subscribe(data => {
+      console.log(data);
+    });
   }
 
   agregarPasatiempo() {
@@ -54,14 +68,28 @@ export class DataComponent {
     );
   }
 
-  noIgual(control: FormControl): {[s: string]: boolean} {
-    const formulario = this;
-    if (control.value !== formulario.controls.password1.value) {
-      return {
-        noIguales: true
+  noIgual = (control: FormControl): { [s: string]: boolean } => {
+    if ( control.value !== this.formulario.controls.password1.value ) {
+      return{
+        noigual: true
       };
     }
     return null;
+  }
+
+  existeUsuario(control: FormControl): Promise<any> | Observable<any> {
+    let promesa = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (control.value === 'strider') {
+          resolve ({
+            existe: true
+          });
+        } else {
+          resolve(null);
+        }
+      }, 3000);
+    });
+    return promesa;
   }
 
   guardarCambios() {

@@ -12,7 +12,7 @@ import { DataComponent } from './components/data/data.component';
   declarations: [
     AppComponent,
     TemplateComponent,
-    DataComponent    
+    DataComponent
   ],
   imports: [
     BrowserModule,
